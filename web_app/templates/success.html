@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NeuralDJ | Mix Successful</title>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .card {
+            max-width: 600px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 { color: #03dac6; margin-bottom: 10px; }
+        .description { color: #aaa; margin-bottom: 30px; }
+
+        /* Fixed Score Box Layout */
+        .score-box {
+            margin: 20px 0;
+            padding: 20px;
+            background: #2c2c2c;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .energy-value {
+            color: #bb86fc;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Waveform Container */
+        #waveform {
+            background: #252525;
+            border-radius: 10px;
+            margin: 25px 0;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .controls { margin-bottom: 25px; }
+
+        .btn {
+            display: inline-block;
+            background: #6200ee;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { transform: scale(1.05); background: #3700b3; }
+        .btn-download { background: #03dac6; color: #000; margin-left: 10px; }
+        .btn-play { background: #bb86fc; color: #000; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔥 Mix Complete!</h1>
+        <p class="description">AI has processed your tracks with beat-matching precision.</p>
+
+        <div class="score-box">
+            <div class="score-row">
+                <span>Song 1 Energy:</span> <span class="energy-value">{{ score1 }}</span>
+            </div>
+            <div class="score-row">
+                <span>Song 2 Energy:</span> <span class="energy-value">{{ score2 }}</span>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #444; margin: 15px 0;">
+            <div class="score-row">
+                <span>Detected Tempo:</span> <span class="energy-value">{{ bpm }} BPM</span>
+            </div>
+            <div class="score-row">
+                <span>AI Transition Speed:</span> <span class="energy-value">{{ fade }}s</span>
+            </div>
+        </div>
+
+        <div id="waveform"></div>
+
+        <div class="controls">
+            <button class="btn btn-play" onclick="wavesurfer.playPause()">Play / Pause</button>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="/" class="btn">Mix Another</a>
+            <a href="/media/exports/web_result.wav" class="btn btn-download" download>Download Mix</a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize WaveSurfer
+        const wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: '#bb86fc',
+            progressColor: '#03dac6',
+            cursorColor: '#ffffff',
+            barWidth: 3,
+            barRadius: 3,
+            responsive: true,
+            height: 100,
+        });
+
+        // Load the actual mix file
+        wavesurfer.load('/media/exports/web_result.wav');
+    </script>
+</body>
+</html>

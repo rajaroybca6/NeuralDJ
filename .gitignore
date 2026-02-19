@@ -1,0 +1,5 @@
+venv/
+data/*.mp3
+exports/*.mp3
+__pycache__/
+.idea/

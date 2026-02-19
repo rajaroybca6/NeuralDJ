@@ -1,7 +1,5 @@
-streamlit>=1.30.0
-django==5.0.2
-librosa==0.10.1
-pydub==0.25.1
-numpy>=1.20.3,<2.0.0
+streamlit
 librosa
 numpy
+pydub
+scipy>=1.10.1,<1.13.0

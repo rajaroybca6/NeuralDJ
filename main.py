@@ -9,38 +9,39 @@ from core.processor import normalize_tracks
 # 1. AI ANALYSIS & MIXING LOGIC
 # ==========================================
 
-# Use ONLY filenames. The modules (analyzer/processor) handle the 'data/' folder logic.
-# Ensure these files are pushed to your GitHub repository inside the /data/ folder.
+# Use ONLY filenames.
 songs = ["test_song.wav", "test2.wav"]
 
-try:
-    # AI ranks the 'vibe' - This was line 15 in your error log
-    scores = {song: get_energy_score(song) for song in songs}
+# Use a spinner to provide visual feedback during processing
+with st.spinner('🎵 AI is ranking the vibes and prepping the mix...'):
+    try:
+        # AI ranks the 'vibe'
+        scores = {song: get_energy_score(song) for song in songs}
 
-    # Sort songs: Low energy first -> High energy second
-    sorted_songs = sorted(songs, key=lambda x: scores[x])
-    song_a_name = sorted_songs[0]
-    song_b_name = sorted_songs[1]
+        # Sort songs: Low energy first -> High energy second
+        sorted_songs = sorted(songs, key=lambda x: scores[x])
+        song_a_name = sorted_songs[0]
+        song_b_name = sorted_songs[1]
 
-    print(f"🎵 AI Decision: Mixing {song_a_name} into {song_b_name}")
+        # Proceed with Smart Mixing using filenames
+        start_mix_at = get_transition_point(song_a_name)
+        song_a, song_b = normalize_tracks(song_a_name, song_b_name)
 
-    # Proceed with Smart Mixing using filenames
-    start_mix_at = get_transition_point(song_a_name)
-    song_a, song_b = normalize_tracks(song_a_name, song_b_name)
+        # Build and export the AI mix
+        final_mix = song_a[:start_mix_at].append(song_b, crossfade=5000)
 
-    # Build and export the AI mix
-    final_mix = song_a[:start_mix_at].append(song_b, crossfade=5000)
+        # Ensure the export directory exists in the Streamlit environment
+        os.makedirs("exports", exist_ok=True)
+        final_mix.export("exports/ai_ranked_mix.wav", format="wav")
 
-    # Ensure the export directory exists in the Streamlit environment
-    os.makedirs("exports", exist_ok=True)
-    final_mix.export("exports/ai_ranked_mix.wav", format="wav")
-    print("🔥 AI has built a high-energy transition!")
+        # Display success message once processing is complete
+        st.success('🔥 AI has built a high-energy transition!')
 
-except FileNotFoundError as e:
-    st.error(f"❌ Audio File Error: {e}")
-    st.info("Check if your files are in the 'data' folder on GitHub.")
-except Exception as e:
-    st.error(f"❌ Analysis Error: {e}")
+    except FileNotFoundError as e:
+        st.error(f"❌ Audio File Error: {e}")
+        st.info("Check if your files are in the 'data' folder on GitHub.")
+    except Exception as e:
+        st.error(f"❌ Analysis Error: {e}")
 
 # ==========================================
 # 2. STREAMLIT UI & DJ DECK DISPLAY
